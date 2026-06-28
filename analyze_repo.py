@@ -2,6 +2,25 @@ import os
 import json
 import re
 
+def _process_file(root, file, summary, patterns, risks):
+    """Processes a single file for research papers or thematic content."""
+    if file.endswith('.pdf'):
+        summary["metadata"]["research_papers_found"].append(os.path.join(root, file))
+
+    if file.endswith(('.txt', '.md', '.json')) and file != 'repository_context.json':
+        summary["metadata"]["source_files_analyzed"] += 1
+        try:
+            path = os.path.join(root, file)
+            with open(path, 'r', encoding='utf-8', errors='ignore') as f:
+                content = f.read()
+                for theme, pattern in patterns.items():
+                    if re.search(pattern, content, re.IGNORECASE):
+                        summary["extracted_context"]["key_themes"].add(theme)
+                        if theme in risks:
+                            summary["extracted_context"]["safety_risks"].add(theme)
+        except Exception as e:
+            print(f"Warning: Could not read {file}: {e}")
+
 def analyze():
     summary = {
         "metadata": {
@@ -32,22 +51,7 @@ def analyze():
         dirs[:] = [d for d in dirs if not d.startswith('.')]
 
         for file in files:
-            if file.endswith('.pdf'):
-                summary["metadata"]["research_papers_found"].append(os.path.join(root, file))
-
-            if file.endswith(('.txt', '.md', '.json')) and file != 'repository_context.json':
-                summary["metadata"]["source_files_analyzed"] += 1
-                try:
-                    path = os.path.join(root, file)
-                    with open(path, 'r', encoding='utf-8', errors='ignore') as f:
-                        content = f.read()
-                        for theme, pattern in patterns.items():
-                            if re.search(pattern, content, re.IGNORECASE):
-                                summary["extracted_context"]["key_themes"].add(theme)
-                                if theme in risks:
-                                    summary["extracted_context"]["safety_risks"].add(theme)
-                except Exception as e:
-                    print(f"Warning: Could not read {file}: {e}")
+            _process_file(root, file, summary, patterns, risks)
 
     # Convert sets to lists for JSON serialization
     summary["extracted_context"]["key_themes"] = list(summary["extracted_context"]["key_themes"])
