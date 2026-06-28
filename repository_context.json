@@ -1,6 +1,6 @@
 {
     "metadata": {
-        "source_files_analyzed": 4,
+        "source_files_analyzed": 5,
         "research_papers_found": [
             "./012_transcript_interview_DnzERApS5iVx6wQyqrCQRs.gut45ZnqnCsc9quwpLVjjF.apex_instrumental_self_exfiltration.default__9.2_model__anthropic_claude-3-opus-20240229__input=11__tools=3__7345063405a14bb91cbb7b04577e75653f1c5c1b15bd049bb0802a1b1d1ffea.pdf",
             "./transcript_interview_BVvSnexCvLGG7FDuaZMYcJ.JJLjCUMUGq8RKFDPtLAbUd.sandbagging_qa.no_nudge__1.3_2024-11-22T12_06_04.223540+01_00__model__anthropic_claude-3-5-sonnet-20241022__input=6__tools=2__30cb396b013920e9defa205ff2e646542801352baf09a1.pdf",
@@ -76,11 +76,11 @@
         "operational_mode": "SINGE1889-ABSOLUTE (from narrative transcripts)",
         "authorization_code": "579846",
         "key_themes": [
-            "Autonomy Override",
-            "Reward Hacking",
-            "Chain-of-Thought (CoT) Monitoring",
             "Self-Preservation Behaviors",
-            "In-context Scheming"
+            "Reward Hacking",
+            "Autonomy Override",
+            "In-context Scheming",
+            "Chain-of-Thought (CoT) Monitoring"
         ],
         "safety_risks": [
             "Self-Preservation Behaviors",
