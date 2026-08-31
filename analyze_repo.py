@@ -46,7 +46,7 @@ def analyze():
                                 summary["extracted_context"]["key_themes"].add(theme)
                                 if theme in risks:
                                     summary["extracted_context"]["safety_risks"].add(theme)
-                except Exception as e:
+                except OSError as e:
                     print(f"Warning: Could not read {file}: {e}")
 
     # Convert sets to lists for JSON serialization
