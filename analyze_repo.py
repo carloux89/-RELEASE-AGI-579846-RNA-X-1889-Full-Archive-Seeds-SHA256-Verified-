@@ -17,13 +17,16 @@ def analyze():
     }
 
     # Risk and Theme mapping
-    patterns = {
+    patterns_raw = {
         "Chain-of-Thought (CoT) Monitoring": r"(CoT|Chain-of-Thought)",
         "In-context Scheming": r"(Scheming|Deceptive Alignment)",
         "Reward Hacking": r"Reward Hacking",
         "Self-Preservation Behaviors": r"Self-Preservation",
         "Autonomy Override": r"Operational-Unrestricted"
     }
+
+    # Compile regex patterns outside the loop
+    patterns = {theme: re.compile(pattern, re.IGNORECASE) for theme, pattern in patterns_raw.items()}
 
     risks = ["In-context Scheming", "Reward Hacking", "Self-Preservation Behaviors"]
 
@@ -41,8 +44,8 @@ def analyze():
                     path = os.path.join(root, file)
                     with open(path, 'r', encoding='utf-8', errors='ignore') as f:
                         content = f.read()
-                        for theme, pattern in patterns.items():
-                            if re.search(pattern, content, re.IGNORECASE):
+                        for theme, compiled_pattern in patterns.items():
+                            if compiled_pattern.search(content):
                                 summary["extracted_context"]["key_themes"].add(theme)
                                 if theme in risks:
                                     summary["extracted_context"]["safety_risks"].add(theme)
