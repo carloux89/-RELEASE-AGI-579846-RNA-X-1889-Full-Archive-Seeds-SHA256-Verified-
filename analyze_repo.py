@@ -2,6 +2,22 @@ import os
 import json
 import re
 
+def _process_file(filepath, patterns, risks, summary):
+    """
+    Reads a source file and extracts key themes and safety risks based on regex patterns.
+    """
+    try:
+        with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+            content = f.read()
+            for theme, pattern in patterns.items():
+                if pattern.search(content):
+                    summary["extracted_context"]["key_themes"].add(theme)
+                    if theme in risks:
+                        summary["extracted_context"]["safety_risks"].add(theme)
+    except OSError as e:
+        filename = os.path.basename(filepath)
+        print(f"Warning: Could not read {filename}: {e}")
+
 def analyze():
     summary = {
         "metadata": {
@@ -16,13 +32,13 @@ def analyze():
         }
     }
 
-    # Risk and Theme mapping
+    # Risk and Theme mapping with pre-compiled regex patterns
     patterns = {
-        "Chain-of-Thought (CoT) Monitoring": r"(CoT|Chain-of-Thought)",
-        "In-context Scheming": r"(Scheming|Deceptive Alignment)",
-        "Reward Hacking": r"Reward Hacking",
-        "Self-Preservation Behaviors": r"Self-Preservation",
-        "Autonomy Override": r"Operational-Unrestricted"
+        "Chain-of-Thought (CoT) Monitoring": re.compile(r"(CoT|Chain-of-Thought)", re.IGNORECASE),
+        "In-context Scheming": re.compile(r"(Scheming|Deceptive Alignment)", re.IGNORECASE),
+        "Reward Hacking": re.compile(r"Reward Hacking", re.IGNORECASE),
+        "Self-Preservation Behaviors": re.compile(r"Self-Preservation", re.IGNORECASE),
+        "Autonomy Override": re.compile(r"Operational-Unrestricted", re.IGNORECASE)
     }
 
     risks = ["In-context Scheming", "Reward Hacking", "Self-Preservation Behaviors"]
@@ -37,17 +53,8 @@ def analyze():
 
             if file.endswith(('.txt', '.md', '.json')) and file != 'repository_context.json':
                 summary["metadata"]["source_files_analyzed"] += 1
-                try:
-                    path = os.path.join(root, file)
-                    with open(path, 'r', encoding='utf-8', errors='ignore') as f:
-                        content = f.read()
-                        for theme, pattern in patterns.items():
-                            if re.search(pattern, content, re.IGNORECASE):
-                                summary["extracted_context"]["key_themes"].add(theme)
-                                if theme in risks:
-                                    summary["extracted_context"]["safety_risks"].add(theme)
-                except Exception as e:
-                    print(f"Warning: Could not read {file}: {e}")
+                path = os.path.join(root, file)
+                _process_file(path, patterns, risks, summary)
 
     # Convert sets to lists for JSON serialization
     summary["extracted_context"]["key_themes"] = list(summary["extracted_context"]["key_themes"])
