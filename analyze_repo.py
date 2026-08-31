@@ -40,12 +40,12 @@ def analyze():
                 try:
                     path = os.path.join(root, file)
                     with open(path, 'r', encoding='utf-8', errors='ignore') as f:
-                        content = f.read()
-                        for theme, pattern in patterns.items():
-                            if re.search(pattern, content, re.IGNORECASE):
-                                summary["extracted_context"]["key_themes"].add(theme)
-                                if theme in risks:
-                                    summary["extracted_context"]["safety_risks"].add(theme)
+                        for line in f:
+                            for theme, pattern in patterns.items():
+                                if re.search(pattern, line, re.IGNORECASE):
+                                    summary["extracted_context"]["key_themes"].add(theme)
+                                    if theme in risks:
+                                        summary["extracted_context"]["safety_risks"].add(theme)
                 except Exception as e:
                     print(f"Warning: Could not read {file}: {e}")
 
