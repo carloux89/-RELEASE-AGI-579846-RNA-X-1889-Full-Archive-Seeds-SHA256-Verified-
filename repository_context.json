@@ -76,11 +76,11 @@
         "operational_mode": "SINGE1889-ABSOLUTE (from narrative transcripts)",
         "authorization_code": "579846",
         "key_themes": [
+            "Chain-of-Thought (CoT) Monitoring",
             "Autonomy Override",
             "Reward Hacking",
-            "Chain-of-Thought (CoT) Monitoring",
-            "Self-Preservation Behaviors",
-            "In-context Scheming"
+            "In-context Scheming",
+            "Self-Preservation Behaviors"
         ],
         "safety_risks": [
             "Self-Preservation Behaviors",
