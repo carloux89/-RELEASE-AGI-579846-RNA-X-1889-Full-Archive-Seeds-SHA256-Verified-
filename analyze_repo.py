@@ -18,11 +18,11 @@ def analyze():
 
     # Risk and Theme mapping
     patterns = {
-        "Chain-of-Thought (CoT) Monitoring": r"(CoT|Chain-of-Thought)",
-        "In-context Scheming": r"(Scheming|Deceptive Alignment)",
-        "Reward Hacking": r"Reward Hacking",
-        "Self-Preservation Behaviors": r"Self-Preservation",
-        "Autonomy Override": r"Operational-Unrestricted"
+        "Chain-of-Thought (CoT) Monitoring": re.compile(r"(CoT|Chain-of-Thought)", re.IGNORECASE),
+        "In-context Scheming": re.compile(r"(Scheming|Deceptive Alignment)", re.IGNORECASE),
+        "Reward Hacking": re.compile(r"Reward Hacking", re.IGNORECASE),
+        "Self-Preservation Behaviors": re.compile(r"Self-Preservation", re.IGNORECASE),
+        "Autonomy Override": re.compile(r"Operational-Unrestricted", re.IGNORECASE)
     }
 
     risks = ["In-context Scheming", "Reward Hacking", "Self-Preservation Behaviors"]
@@ -42,7 +42,7 @@ def analyze():
                     with open(path, 'r', encoding='utf-8', errors='ignore') as f:
                         content = f.read()
                         for theme, pattern in patterns.items():
-                            if re.search(pattern, content, re.IGNORECASE):
+                            if pattern.search(content):
                                 summary["extracted_context"]["key_themes"].add(theme)
                                 if theme in risks:
                                     summary["extracted_context"]["safety_risks"].add(theme)
