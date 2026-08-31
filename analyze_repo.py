@@ -39,6 +39,9 @@ def analyze():
                 summary["metadata"]["source_files_analyzed"] += 1
                 try:
                     path = os.path.join(root, file)
+                    # Limit file size to 10 MB to prevent unbounded file read
+                    if os.path.getsize(path) > 10 * 1024 * 1024:
+                        raise ValueError(f"File size exceeds limit of 10 MB ({os.path.getsize(path)} bytes)")
                     with open(path, 'r', encoding='utf-8', errors='ignore') as f:
                         content = f.read()
                         for theme, pattern in patterns.items():
