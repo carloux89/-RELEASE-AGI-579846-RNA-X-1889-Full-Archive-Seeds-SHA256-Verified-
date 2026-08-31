@@ -25,7 +25,7 @@ def analyze():
         "Autonomy Override": r"Operational-Unrestricted"
     }
 
-    risks = ["In-context Scheming", "Reward Hacking", "Self-Preservation Behaviors"]
+    risks = {"In-context Scheming", "Reward Hacking", "Self-Preservation Behaviors"}
 
     for root, dirs, files in os.walk('.'):
         # Skip .git and hidden dirs
