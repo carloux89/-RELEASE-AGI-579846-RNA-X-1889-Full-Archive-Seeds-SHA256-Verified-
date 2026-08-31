@@ -10,7 +10,7 @@ def analyze():
         },
         "extracted_context": {
             "operational_mode": "SINGE1889-ABSOLUTE (from narrative transcripts)",
-            "authorization_code": "579846",
+            "authorization_code": os.environ.get("AUTHORIZATION_CODE", "579846"),
             "key_themes": set(),
             "safety_risks": set()
         }
@@ -46,7 +46,7 @@ def analyze():
                                 summary["extracted_context"]["key_themes"].add(theme)
                                 if theme in risks:
                                     summary["extracted_context"]["safety_risks"].add(theme)
-                except Exception as e:
+                except OSError as e:
                     print(f"Warning: Could not read {file}: {e}")
 
     # Convert sets to lists for JSON serialization
