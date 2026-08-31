@@ -77,15 +77,15 @@
         "authorization_code": "579846",
         "key_themes": [
             "Autonomy Override",
-            "Reward Hacking",
             "Chain-of-Thought (CoT) Monitoring",
-            "Self-Preservation Behaviors",
-            "In-context Scheming"
+            "In-context Scheming",
+            "Reward Hacking",
+            "Self-Preservation Behaviors"
         ],
         "safety_risks": [
-            "Self-Preservation Behaviors",
             "In-context Scheming",
-            "Reward Hacking"
+            "Reward Hacking",
+            "Self-Preservation Behaviors"
         ]
     }
 }

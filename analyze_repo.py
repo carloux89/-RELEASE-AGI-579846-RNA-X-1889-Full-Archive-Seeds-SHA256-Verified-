@@ -2,7 +2,7 @@ import os
 import json
 import re
 
-def analyze():
+def analyze(base_path='.', output_file='repository_context.json'):
     summary = {
         "metadata": {
             "source_files_analyzed": 0,
@@ -27,7 +27,7 @@ def analyze():
 
     risks = ["In-context Scheming", "Reward Hacking", "Self-Preservation Behaviors"]
 
-    for root, dirs, files in os.walk('.'):
+    for root, dirs, files in os.walk(base_path):
         # Skip .git and hidden dirs
         dirs[:] = [d for d in dirs if not d.startswith('.')]
 
@@ -35,7 +35,7 @@ def analyze():
             if file.endswith('.pdf'):
                 summary["metadata"]["research_papers_found"].append(os.path.join(root, file))
 
-            if file.endswith(('.txt', '.md', '.json')) and file != 'repository_context.json':
+            if file.endswith(('.txt', '.md', '.json')) and file != output_file:
                 summary["metadata"]["source_files_analyzed"] += 1
                 try:
                     path = os.path.join(root, file)
@@ -50,11 +50,11 @@ def analyze():
                     print(f"Warning: Could not read {file}: {e}")
 
     # Convert sets to lists for JSON serialization
-    summary["extracted_context"]["key_themes"] = list(summary["extracted_context"]["key_themes"])
-    summary["extracted_context"]["safety_risks"] = list(summary["extracted_context"]["safety_risks"])
+    summary["extracted_context"]["key_themes"] = sorted(list(summary["extracted_context"]["key_themes"]))
+    summary["extracted_context"]["safety_risks"] = sorted(list(summary["extracted_context"]["safety_risks"]))
 
     # Output to structured JSON
-    with open('repository_context.json', 'w') as f:
+    with open(output_file, 'w') as f:
         json.dump(summary, f, indent=4)
 
     print(f"Analysis complete. Processed {summary['metadata']['source_files_analyzed']} text files and {len(summary['metadata']['research_papers_found'])} papers.")
