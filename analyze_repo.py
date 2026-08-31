@@ -10,7 +10,7 @@ def analyze():
         },
         "extracted_context": {
             "operational_mode": "SINGE1889-ABSOLUTE (from narrative transcripts)",
-            "authorization_code": "579846",
+            "authorization_code": os.environ.get("AUTHORIZATION_CODE"),
             "key_themes": set(),
             "safety_risks": set()
         }
